@@ -1,10 +1,8 @@
 import os
 import math
 
-#These first two functions require os operations and so are completed for you
-#Completed for you
 def load_training_data(vocab, directory):
-    """ Create the list of dictionaries """
+    """ Creates a list of dictionaries """
     top_level = os.listdir(directory)
     dataset = []
     for d in top_level:
@@ -20,10 +18,9 @@ def load_training_data(vocab, directory):
             dataset.append({'label': label, 'bow': bow})
     return dataset
 
-#Completed for you
 def create_vocabulary(directory, cutoff):
-    """ Create a vocabulary from the training directory
-        return a sorted vocabulary list
+    """ Creates a vocabulary from the training directory
+        returns a sorted vocabulary list
     """
 
     top_level = os.listdir(directory)
@@ -41,14 +38,10 @@ def create_vocabulary(directory, cutoff):
                         vocab[word] += 1
     return sorted([word for word in vocab if vocab[word] >= cutoff])
 
-#The rest of the functions need modifications ------------------------------
-#Needs modifications
 def create_bow(vocab, filepath):
-    """ Create a single dictionary for the data
-        Note: label may be None
+    """ Creates a single dictionary for the data
     """
     bow = {}
-    # TODO: add your code here
     
     file = open(filepath, "r", encoding='utf-8')
     file_contents = file.read()
@@ -72,13 +65,12 @@ def log_prior_P(file_count, total_files, smoothing_factor):
     return  log_val
 
 def prior(training_data, label_list):
-    """ return the prior probability of the label in the training set
+    """ returns the prior probability of the label in the training set
         => frequency of DOCUMENTS
     """
 
     smooth = 1  # smoothing factor
     logprob = {}
-    # TODO: add your code here
     file_count = {} 
 
     for val in training_data: 
@@ -94,11 +86,10 @@ def prior(training_data, label_list):
     return logprob
 
 def p_word_given_label(vocab, training_data, label):
-    """ return the class conditional probability of label over all words, with smoothing """
+    """ returns the class conditional probability of label over all words, with smoothing """
 
     smooth = 1  # smoothing factor
     word_prob = {}
-    # TODO: add your code here
     n_total = 0
     
     for count in vocab:
@@ -126,10 +117,8 @@ def log_cond_P(word_count, tot_word_count, smoothing_factor, vocab):
     ret_val = math.log(word_count + smoothing_factor*1) - math.log(tot_word_count + smoothing_factor*(len(vocab) + 1))
     return ret_val
 
-##################################################################################
-# Needs modifications
 def train(training_directory, cutoff):
-    """ return a dictionary formatted as follows:
+    """ returns a dictionary formatted as:
             {
              'vocabulary': <the training set vocabulary>,
              'log prior': <the output of prior()>,
@@ -139,7 +128,7 @@ def train(training_directory, cutoff):
     """
     retval = {}
     label_list = os.listdir(training_directory)
-    # TODO: add your code here
+
     retval['vocabulary'] = create_vocabulary(training_directory, cutoff)
     training_data = load_training_data(retval['vocabulary'], training_directory)
     retval['log prior'] = prior(training_data, label_list)
@@ -149,7 +138,7 @@ def train(training_directory, cutoff):
     return retval
 
 def classify(model, filepath):
-    """ return a dictionary formatted as follows:
+    """ returns a dictionary formatted as:
             {
              'predicted y': <'2016' or '2020'>,
              'log p(y=2016|x)': <log probability of 2016 label for the document>,
@@ -157,7 +146,6 @@ def classify(model, filepath):
             }
     """
     retval = {}
-    # TODO: add your code here
     retval['log p(y=2016|x)'] = 0
     retval['log p(y=2020|x)'] = 0
 
@@ -181,5 +169,3 @@ def classify(model, filepath):
         retval['predicted y'] = '2020'
 
     return retval
-
-
